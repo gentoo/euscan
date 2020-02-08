@@ -1,0 +1,44 @@
+# Copyright 2020 Gentoo Authors
+# Licensed under the GNU General Public License v2
+
+version: "3"
+
+services:
+  runserver:
+    depends_on:
+      - celeryd
+    image: ${COMPOSE_PROJECT_NAME}_celeryd:latest
+    environment:
+      DJANGO_SETTINGS_MODULE: euscanwww.settings
+      EUSCAN_SECRET_KEY: ${EUSCAN_SECRET_KEY:?}
+    volumes:
+      - "./euscanwww/:/tmp/euscan/euscanwww/"
+      - "./pym/euscan/:/root/.local/lib64/python2.7/site-packages/euscan"
+    ports:
+      - "127.0.0.1:55080:55080"
+    tty: true
+
+  celerycam:
+    depends_on:
+      - celeryd
+    image: ${COMPOSE_PROJECT_NAME}_celeryd:latest
+    environment:
+      DJANGO_SETTINGS_MODULE: euscanwww.settings
+      EUSCAN_SECRET_KEY: ${EUSCAN_SECRET_KEY:?}
+    volumes:
+      - "./euscanwww/:/tmp/euscan/euscanwww/"
+      - "./pym/euscan/:/root/.local/lib64/python2.7/site-packages/euscan"
+    command: python2 manage.py celerycam
+    tty: true
+
+  celeryd:
+    build:
+      context: .
+    environment:
+      DJANGO_SETTINGS_MODULE: euscanwww.settings
+      EUSCAN_SECRET_KEY: ${EUSCAN_SECRET_KEY:?}
+    volumes:
+      - "./euscanwww/:/tmp/euscan/euscanwww/"
+      - "./pym/euscan/:/root/.local/lib64/python2.7/site-packages/euscan"
+    command: python2 manage.py celeryd -B -E -l INFO
+    tty: true
