@@ -5,6 +5,12 @@ import os.path
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+ALLOWED_HOSTS = [
+    '0.0.0.0',
+    '127.0.0.1',
+    '172.0.0.0/8',  # Docker internal
+]
+
 ADMINS = (
     ('admin', 'admin@example.com'),
 )
