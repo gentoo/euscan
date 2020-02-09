@@ -1,7 +1,7 @@
 import portage
 
 from django.utils import timezone
-from django.db.transaction import commit_on_success
+from django.db.transaction import atomic
 
 from euscan import CONFIG, output
 from euscan.scan import scan_upstream as euscan_scan_upstream
@@ -150,7 +150,7 @@ class ScanUpstream(object):
             version.delete()
 
 
-@commit_on_success
+@atomic
 def scan_upstream(packages=None, purge_versions=False,
                   logger=None):
     logger = logger or FakeLogger()

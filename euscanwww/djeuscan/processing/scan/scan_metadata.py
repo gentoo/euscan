@@ -5,7 +5,7 @@ from gentoolkit.metadata import MetaData
 
 import xml.etree.cElementTree as etree
 
-from django.db.transaction import commit_on_success
+from django.db.transaction import atomic
 from django.core.management.color import color_style
 from django.core.exceptions import ValidationError
 
@@ -236,7 +236,7 @@ class ScanMetadata(object):
                     herd.maintainers.add(maintainer)
 
 
-@commit_on_success
+@atomic
 def scan_metadata(packages=None, category=None, logger=None, populate=False):
     scan_handler = ScanMetadata(logger=logger)
 

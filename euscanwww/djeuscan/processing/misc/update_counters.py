@@ -1,4 +1,4 @@
-from django.db.transaction import commit_on_success
+from django.db.transaction import atomic
 from django.utils import timezone
 
 from djeuscan.models import Package, Herd, Maintainer, Version, HerdLog, \
@@ -36,7 +36,7 @@ def _add_last_ver(storage, version):
         storage[key] = version
 
 
-@commit_on_success
+@atomic
 def update_counters(fast=False, nolog=False, logger=None):
     logger = logger or FakeLogger()
 

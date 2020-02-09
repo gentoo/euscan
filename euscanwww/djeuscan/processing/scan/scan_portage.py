@@ -11,7 +11,7 @@ from layman import Layman
 
 from xml.etree.ElementTree import iterparse, ParseError
 
-from django.db.transaction import commit_on_success
+from django.db.transaction import atomic
 from django.db import models
 from django.core.management.color import color_style
 from django.conf import settings
@@ -395,7 +395,7 @@ def populate_overlays(logger):
             logger.info("+ [o] %s", overlay)
 
 
-@commit_on_success
+@atomic
 def scan_portage(packages=None, category=None, no_log=False, upstream=False,
                  purge_packages=False, purge_versions=False, logger=None):
 
